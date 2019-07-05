@@ -3,6 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import { Content, Form, Item, Input, Label, Button, Icon, Text } from 'native-base';
 import axios from 'axios';
 import { StackActions, NavigationActions } from 'react-navigation';
+import deviceStorage from '../constants/deviceStorage';
 
 export default class FormAdd extends Component {
 	constructor() {
@@ -17,7 +18,19 @@ export default class FormAdd extends Component {
 			password: '',
 			img_url: 'https://cdn.iconscout.com/icon/free/png-256/avatar-372-456324.png'
 		}
+		this.stateJwt = {
+			jwt: '',
+			loading: true
+		}
+		this.newJWT = this.newJWT.bind(this);
+		this.loadJWT = deviceStorage.loadJWT.bind(this);
+		this.loadJWT();
 	}
+	newJWT(jwt){
+		this.setStateJwt({
+		  jwt: jwt
+		});
+	} 
 
 	validateEmail = (email) => {
 		const regex = /^[a-z._-]+@[a-z.-]+\.[a-z]{2,4}$/;
@@ -49,6 +62,10 @@ export default class FormAdd extends Component {
 	}
 
 	formSubmit = () => {
+
+
+
+
 		const vm = this;
 		if (this.state.name == "") {
 			alert('Please enter contact name!')
@@ -59,8 +76,43 @@ export default class FormAdd extends Component {
 		} else if (this.validatePassword(this.state.password) == false) {
 			alert('Please enter a valid password')
 		} else {
+			const headers = {
+				'Authorization': 'Bearer ' + vm.stateJwt.jwt
+			};
+			axios.post(url, headers, vm.state)
+			.then(function (response) {
+				const data = response.data;
+				console.log(data.msg);
+			})
+			.catch(function (err) {
+				alert(err)
+			})
+
+				/*
 			const url = global.api+'/api/createuser';
-			axios.post(url, vm.state)
+			deviceStorage.saveKey("id_token").then(function (response){
+				console.log("Entrou get Key")
+				const headers = {
+					'Authorization': 'Bearer ' + response
+				};
+			
+				axios({
+					method: 'POST',
+					url: url,
+					headers: headers,
+				  }, vm.state ).then((response) => {
+					this.setState({
+					  email: response.data.email,
+					  loading: false
+					});
+				  }).catch((error) => {
+					this.setState({
+					  error: 'Error retrieving data',
+					  loading: false
+					});
+				  });
+				
+				axios.post(url, headers, vm.state)
 				.then(function (response) {
 					const data = response.data;
 					console.log(data.msg);
@@ -68,6 +120,8 @@ export default class FormAdd extends Component {
 				.catch(function (err) {
 					alert(err)
 				})
+			});	*/
+
 		}
 	}
 	render() {

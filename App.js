@@ -11,11 +11,9 @@ export default class App extends React.Component {
     
   constructor(){   
       super();
-   
       // Creating Global Variable.
-      global.api = 'http://192.168.1.35:4000';
-   
-    }
+      global.api = 'http://192.168.254.5:4000';
+  }
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (

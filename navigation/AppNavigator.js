@@ -3,9 +3,17 @@ import { createAppContainer, createStackNavigator,createSwitchNavigator } from '
 import MainTabNavigator from './MainTabNavigator';
 import EditScreen from '../screens/EditScreen';
 import { HeaderBackButton } from 'react-navigation';
+import LoginScreen from '../screens/LoginScreen';
 
 
 const EditStack = createStackNavigator({ 
+  
+  Login: {
+    screen: LoginScreen,
+    navigationOptions: ({navigation}) => ({ //don't forget parentheses around the object notation
+      title: 'Login',
+    })
+  },
   Main: {
     screen: MainTabNavigator,
     navigationOptions: ({navigation}) => ({ //don't forget parentheses around the object notation
